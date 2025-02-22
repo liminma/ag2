@@ -377,7 +377,7 @@ class GeminiClient:
 
     def _extract_system_instruction(self, messages: list[dict]) -> str | None:
         """Extract system instruction if provided."""
-        if messages is None or len(messages) == 0 or messages[0]["role"] != "system":
+        if messages is None or len(messages) == 0 or messages[0].get("role") != "system":
             return None
 
         message = messages.pop(0)
