@@ -393,7 +393,12 @@ class GeminiClient:
             return None
 
         message = messages.pop(0)
-        content = message["content"].strip()
+        content = message["content"]
+
+        # Multi-model uses a list of dictionaries as content with text for the system message
+        # Otherwise normal agents will have strings as content
+        content = content[0].get("text", "").strip() if isinstance(content, list) else content.strip()
+
         content = content if len(content) > 0 else None
         return content
 
@@ -826,7 +831,13 @@ def calculate_gemini_cost(use_vertexai: bool, input_tokens: int, output_tokens: 
         # Vertex AI pricing - based on Text input
         # https://cloud.google.com/vertex-ai/generative-ai/pricing#vertex-ai-pricing
 
-        if "gemini-1.5-flash" in model_name:
+        if "gemini-2.0-flash-lite" in model_name:
+            return total_cost_mil(0.075, 0.3)
+
+        elif "gemini-2.0-flash" in model_name:
+            return total_cost_mil(0.15, 0.6)
+
+        elif "gemini-1.5-flash" in model_name:
             if up_to_128k:
                 return total_cost_k(0.00001875, 0.000075)
             else:
@@ -851,7 +862,15 @@ def calculate_gemini_cost(use_vertexai: bool, input_tokens: int, output_tokens: 
     else:
         # Non-Vertex AI pricing
 
-        if "gemini-1.5-flash-8b" in model_name:
+        if "gemini-2.0-flash-lite" in model_name:
+            # https://ai.google.dev/gemini-api/docs/pricing#gemini-2.0-flash-lite
+            return total_cost_mil(0.075, 0.3)
+
+        elif "gemini-2.0-flash" in model_name:
+            # https://ai.google.dev/gemini-api/docs/pricing#gemini-2.0-flash
+            return total_cost_mil(0.1, 0.4)
+
+        elif "gemini-1.5-flash-8b" in model_name:
             # https://ai.google.dev/pricing#1_5flash-8B
             if up_to_128k:
                 return total_cost_mil(0.0375, 0.15)
