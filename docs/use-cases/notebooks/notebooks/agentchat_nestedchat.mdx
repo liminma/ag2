@@ -31,11 +31,11 @@ nested chat.
 Install `pyautogen`:
 
 ```bash
-pip install pyautogen
+pip install pyautogen[openai]
 ```
 
 For more information, please refer to the [installation
-guide](../../../../docs/user-guide/basic-concepts/installing-ag2).
+guide](../../../../../docs/user-guide/basic-concepts/installing-ag2).
 </Info>
 </div>
 
@@ -44,15 +44,14 @@ from typing import Annotated
 
 import autogen
 
-config_list = autogen.config_list_from_json(env_or_file="OAI_CONFIG_LIST")
-llm_config = {"config_list": config_list}
+llm_config = autogen.LLMConfig.from_json(path="OAI_CONFIG_LIST")
 ```
 
 
 <div class="tip">
 <Tip>
 Learn more about the various ways to configure LLM endpoints
-[here](../../../../docs/topics/llm_configuration).
+[here](../../../../../docs/user-guide/basic-concepts/llm-configuration/llm-configuration).
 </Tip>
 </div>
 
@@ -87,7 +86,7 @@ the inner agent critic.
 ```python
 writer = autogen.AssistantAgent(
     name="Writer",
-    llm_config={"config_list": config_list},
+    llm_config=llm_config,
     system_message="""
     You are a professional writer, known for your insightful and engaging articles.
     You transform complex concepts into compelling narratives.
@@ -108,7 +107,7 @@ user_proxy = autogen.UserProxyAgent(
 
 critic = autogen.AssistantAgent(
     name="Critic",
-    llm_config={"config_list": config_list},
+    llm_config=llm_config,
     system_message="""
     You are a critic, known for your thoroughness and commitment to standards.
     Your task is to scrutinize content for any harmful elements or regulatory violations, ensuring

@@ -21,6 +21,10 @@ In this notebook, see how DocAgent, through natural language, can
 1.  Ingest documents from a local file or URL
 2.  and answer questions with RAG capability
 
+For more information on DocAgent, read about [DocAgent in our Reference
+Agents](https://docs.ag2.ai/docs/user-guide/reference-agents/docagent)
+section.
+
 ### Installation
 
 To get started with the document agent integration in AG2, follow these
@@ -29,7 +33,7 @@ steps:
 Install AG2 with the `rag` extra:
 
 ```bash
-pip install ag2[rag]
+pip install -U ag2[openai,rag]
 ```
 
 Notes:
@@ -43,15 +47,17 @@ You’re all set! Now you can start using DocAgent feature in AG2.
 
 ## Documents supported
 
-The following documents can be ingested: - PDF - IMAGE - DOCX - HTML -
-PPTX - ASCIIDOC - MD
+The following documents can be ingested: - PDF - DOCX (DOCX, DOTX, DOCM,
+DOTM) - XLSX - PPTX (PPTX, POTX, PPSX, PPTM, POTM, PPSM) - HTML -
+ASCIIDOC (ADOC, ASCIIDOC, ASC) - MD (MD, MARKDOWN) - XML (XML, NXML) -
+TXT - JSON - CSV - IMAGE (BMP, JPG, JPEG, PNG, TIFF, TIF)
 
 You can also have the DocAgent use a web page by giving it a URL to
 ingest.
 
 ## Inside the DocAgent
 
-![](docagent_swarm.png)
+![](https://media.githubusercontent.com/media/ag2ai/ag2/refs/heads/main/notebook/docagent_swarm.png)
 
 Before jumping into the code, let’s have a look at the swarm inside the
 DocAgent.
@@ -118,10 +124,27 @@ llm_config = {
 ```python
 # Create a document agent and ask them to ingest the document and answer the question
 document_agent = DocAgent(llm_config=llm_config, collection_name="toast_report")
-document_agent.run(
+run_response = document_agent.run(
+    message="could you ingest ../test/agentchat/contrib/graph_rag/Toast_financial_report.pdf? What is the fiscal year 2024 financial summary?",
+    max_turns=1,
+)
+run_response.process()
+```
+
+### \[With Citations Support\] Ingesting local documents and answering questions
+
+```python
+from autogen.agents.experimental.document_agent.chroma_query_engine import VectorChromaCitationQueryEngine
+
+# create a query engine with citation support
+query_engine = VectorChromaCitationQueryEngine(collection_name="toast_report", enable_query_citations=True)
+# Create a document agent and ask them to ingest the document and answer the question
+document_agent = DocAgent(llm_config=llm_config, collection_name="toast_report", query_engine=query_engine)
+run_response = document_agent.run(
     "could you ingest ../test/agentchat/contrib/graph_rag/Toast_financial_report.pdf? What is the fiscal year 2024 financial summary?",
     max_turns=1,
 )
+run_response.process()
 ```
 
 ### Fetching a webpage and answering questions
@@ -129,10 +152,11 @@ document_agent.run(
 ```python
 # Create a document agent and ask them to summarize a web page article
 document_agent = DocAgent(llm_config=llm_config, collection_name="news_reports")
-document_agent.run(
+run_response = document_agent.run(
     "could you read 'https://www.independent.co.uk/space/earth-core-inner-shape-change-b2695585.html' and summarize the article?",
     max_turns=1,
 )
+run_response.process()
 ```
 
 ## Multiple DocAgents in a Swarm
@@ -153,7 +177,7 @@ collections](https://cookbook.chromadb.dev/core/collections/)).
 
 ```python
 # Ensure the OPENAI_API_KEY is set in the environment
-llm_config = {"model": "gpt-4o-mini", "api_type": "openai", "cache_seed": None}
+llm_config = {"model": "gpt-4o", "api_type": "openai", "cache_seed": None}
 
 # Create agents for the NVIDIA and AMD documents
 # Each agent has a unique collection_name so that data and queries are run in different vector store spaces

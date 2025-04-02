@@ -33,14 +33,14 @@ and have a **title** field defined for the root model which will be
 loaded as a `response_format` for the Agent.
 
 For more info on structured outputs, see [our
-documentation](https://docs.ag2.ai/docs/user-guide/basic-concepts/structured-outputs).
+documentation](https://docs.ag2.ai/docs/user-guide/basic-concepts/llm-configuration/structured-outputs).
 
 
 <div class="info Requirements">
 <Info>
 Install `ag2`:
 ```bash
-pip install ag2
+pip install -U ag2[openai]
 ```
 
 > **Note:** If you have been using `autogen` or `pyautogen`, all you need to do is upgrade it using:  
@@ -54,7 +54,7 @@ pip install ag2
 > as `pyautogen`, `autogen`, and `ag2` are aliases for the same PyPI package.  
 
 
-For more information, please refer to the [installation guide](/docs/user-guide/basic-concepts/installing-ag2).
+For more information, please refer to the [installation guide](https://docs.ag2.ai/docs/user-guide/basic-concepts/installing-ag2).
 </Info>
 </div>
 
@@ -68,9 +68,9 @@ Ollama (`ollama`)
 ## Set your API Endpoint
 
 The
-[`config_list_from_json`](https://docs.ag2.ai/docs/api-reference/autogen/config_list_from_json#config-list-from-json)
-function loads a list of configurations from an environment variable or
-a JSON file.
+[`LLMConfig.from_json`](https://docs.ag2.ai/docs/api-reference/autogen/llm_config/LLMConfig)
+method loads a list of configurations from an environment variable or a
+JSON file.
 
 Here is an example of a configuration using the `gpt-4o-mini` model that
 will use a `MathReasoning` response format. To use it, paste it into
@@ -133,21 +133,16 @@ key.
 import autogen
 
 # Load the configuration including the response format
-config_list = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST",
-    filter_dict={
-        "tags": ["gpt-4o-response-format"],
-    },
-)
+llm_config = autogen.LLMConfig.from_json(path="OAI_CONFIG_LIST", cache_seed=42).where(tags=["gpt-4o-response-format"])
 
 # Output the configuration, showing that it matches the configuration file.
-config_list
+llm_config
 ```
 
 
 <div class="tip">
 <Tip>
-Learn more about configuring LLMs for agents [here](/docs/topics/llm_configuration).
+Learn more about configuring LLMs for agents [here](https://docs.ag2.ai/docs/user-guide/basic-concepts/llm-configuration/llm-configuration).
 </Tip>
 </div>
 
@@ -171,11 +166,6 @@ The `response_format` is added to the LLM configuration and then this
 configuration is applied to the agent.
 
 ```python
-llm_config = {
-    "config_list": config_list,
-    "cache_seed": 42,
-}
-
 user_proxy = autogen.UserProxyAgent(
     name="User_proxy",
     system_message="A human admin.",

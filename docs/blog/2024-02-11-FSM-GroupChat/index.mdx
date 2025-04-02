@@ -1,8 +1,6 @@
 ---
 title: "FSM Group Chat -- User-specified agent transitions"
-authors:
-  - joshkyh
-  - freedeaths
+authors: [joshkyh, freedeaths]
 tags: [AutoGen]
 ---
 
@@ -15,31 +13,31 @@ tags: [AutoGen]
 </div>
 
 <div class="blog-authors">
-  <p class="authors">Authors:</p>
-  <CardGroup cols={2}>
-    <Card href="https://github.com/joshkyh/">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/joshkyh.png" />
-          </div>
-          <div>
-            <p class="name">Joshua Kim</p>
-            <p>AI Freelancer at SpectData</p>
-          </div>
-        </div>
-    </Card>
-    <Card href="https://github.com/freedeaths/">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/freedeaths.png" />
-          </div>
-          <div>
-            <p class="name">Yishen Sun</p>
-            <p>Data Scientist at PingCAP LAB</p>
-          </div>
-        </div>
-    </Card>
-  </CardGroup>
+<p class="authors">Authors:</p>
+<CardGroup cols={2}>
+<Card href="https://github.com/joshkyh/">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/joshkyh.png" />
+      </div>
+      <div>
+        <p class="name">Joshua Kim</p>
+        <p>AI Freelancer at SpectData</p>
+      </div>
+    </div>
+</Card>
+<Card href="https://github.com/freedeaths/">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/freedeaths.png" />
+      </div>
+      <div>
+        <p class="name">Yishen Sun</p>
+        <p>Data Scientist at PingCAP LAB</p>
+      </div>
+    </div>
+</Card>
+</CardGroup>
 </div>
 
 ![FSM Group Chat](img/teaser.webp)
@@ -74,7 +72,7 @@ A quick demonstration of how to initiate a FSM-based `GroupChat` in the `AutoGen
 
 0. Pre-requisites
 ```bash
-pip install autogen[graph]
+pip install autogen[openai,graph]
 ```
 
 1. Import dependencies

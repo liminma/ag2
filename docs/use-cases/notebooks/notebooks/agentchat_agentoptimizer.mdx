@@ -19,7 +19,7 @@ AutoGen offers conversable agents powered by LLM, tool, or human, which
 can be used to perform tasks collectively via automated chat. This
 framework allows tool use and human participation through multi-agent
 conversation. Please find documentation about this feature
-[here](https://docs.ag2.ai/docs/Use-Cases/agent_chat).
+[here](https://docs.ag2.ai/latest/docs/user-guide/basic-concepts/conversable-agent/).
 
 In traditional ML pipeline, we train a model by updating its parameter
 according to the loss on the training set, while in the era of LLM
@@ -45,7 +45,7 @@ scenario, we test the proposed AgentOptimizer in solving problems from
 the [MATH dataset](https://github.com/hendrycks/math).
 
 <img
-src="https://media.githubusercontent.com/media/ag2ai/ag2/main/website/blog/2023-12-23-AgentOptimizer/img/agentoptimizer.png"
+src="https://raw.githubusercontent.com/ag2ai/ag2/refs/heads/main/website/docs/_blogs/2023-12-23-AgentOptimizer/img/agentoptimizer.webp"
 alt="AgentOptimizer" />
 
 More information could be found in the
@@ -296,8 +296,8 @@ problems. Here, we use gpt-4-1106-preview to construct the
 AssistantAgent.
 
 ```python
-llm_config = {
-    "config_list": [
+llm_config = autogen.LLMConfig(
+    config_list=[
         {
             "model": "gpt-4-1106-preview",
             "api_type": "azure",
@@ -306,7 +306,7 @@ llm_config = {
             "api_version": "2023-07-01-preview",
         }
     ]
-}
+)
 
 assistant = autogen.AssistantAgent(
     name="assistant",

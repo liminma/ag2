@@ -40,20 +40,20 @@ steps:
 1.  Install AG2 with the `browser-use` extra:
 
     ```bash
-    pip install ag2[browser-use]
+    pip install -U ag2[openai,browser-use]
     ```
 
     > **Note:** If you have been using `autogen` or `pyautogen`, all you
     > need to do is upgrade it using:
     >
     > ```bash
-    > pip install -U autogen[browser-use]
+    > pip install -U autogen[openai,browser-use]
     > ```
     >
     > or
     >
     > ```bash
-    > pip install -U pyautogen[browser-use]
+    > pip install -U pyautogen[openai,browser-use]
     > ```
     >
     > as `pyautogen`, `autogen`, and `ag2` are aliases for the same PyPI
@@ -117,12 +117,13 @@ manual `UserProxyAgent` creation.
 # The `web_tool="browser_use"` tells the agent to use the `BrowserUseTool` to surf the web.
 websurfer = WebSurferAgent(name="WebSurfer", llm_config=llm_config, web_tool="browser_use")
 
-websurfer.run(
+run_response = websurfer.run(
     message="Get info from https://docs.ag2.ai/docs/Home",
     tools=websurfer.tools,
     max_turns=2,
     user_input=False,
 )
+run_response.process()
 ```
 
 #### **Manual Setup:** Using `initiate_chat` Method
@@ -158,20 +159,20 @@ steps:
 1.  Install AG2 with the `crawl4ai` extra:
 
     ```bash
-    pip install ag2[crawl4ai]
+    pip install -U ag2[openai,crawl4ai]
     ```
 
     > **Note:** If you have been using `autogen` or `pyautogen`, all you
     > need to do is upgrade it using:
     >
     > ```bash
-    > pip install -U autogen[crawl4ai]
+    > pip install -U autogen[openai,crawl4ai]
     > ```
     >
     > or
     >
     > ```bash
-    > pip install -U pyautogen[crawl4ai]
+    > pip install -U pyautogen[openai,crawl4ai]
     > ```
     >
     > as `pyautogen`, `autogen`, and `ag2` are aliases for the same PyPI
@@ -236,12 +237,13 @@ manual `UserProxyAgent` creation.
 # `web_tool` parameter must be set to `crawl4ai` in order for the `Crawl4AITool` to be used.
 websurfer = WebSurferAgent(name="WebSurfer", llm_config=llm_config, web_tool="crawl4ai")
 
-websurfer.run(
+run_response = websurfer.run(
     message="Get info from https://docs.ag2.ai/docs/Home",
     tools=websurfer.tools,
     max_turns=2,
     user_input=False,
 )
+run_response.process()
 ```
 
 #### **Manual Setup:** Using `initiate_chat` Method

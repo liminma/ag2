@@ -34,20 +34,20 @@ To integrate LangChain tools into the AG2 framework, install the
 required dependencies:
 
 ```bash
-pip install ag2[interop-langchain]
+pip install -U ag2[openai,interop-langchain]
 ```
 
 > **Note:** If you have been using `autogen` or `pyautogen`, all you
 > need to do is upgrade it using:
 >
 > ```bash
-> pip install -U autogen[interop-langchain]
+> pip install -U autogen[openai,interop-langchain]
 > ```
 >
 > or
 >
 > ```bash
-> pip install -U pyautogen[interop-langchain]
+> pip install -U pyautogen[openai,interop-langchain]
 > ```
 >
 > as `pyautogen`, `autogen`, and `ag2` are aliases for the same PyPI
@@ -86,8 +86,7 @@ Load the config for LLM, which include API key and model.
 import autogen
 
 config_path = "OAI_CONFIG_LIST"
-config_list = autogen.config_list_from_json(config_path, filter_dict={"model": ["gpt-4o"]})
-llm_config = {"temperature": 0, "config_list": config_list}
+llm_config = autogen.LLMConfig.from_json(path=config_path, temperature=0).where(model=["gpt-4o"])
 ```
 
 ### Tool Integration
@@ -147,20 +146,20 @@ framework. This ensures all dependencies for both frameworks are
 installed.
 
 ```bash
-pip install ag2[interop-crewai]
+pip install -U ag2[openai,interop-crewai]
 ```
 
 > **Note:** If you have been using `autogen` or `pyautogen`, all you
 > need to do is upgrade it using:
 >
 > ```bash
-> pip install -U autogen[interop-crewai]
+> pip install -U autogen[openai,interop-crewai]
 > ```
 >
 > or
 >
 > ```bash
-> pip install -U pyautogen[interop-crewai]
+> pip install -U pyautogen[openai,interop-crewai]
 > ```
 >
 > as `pyautogen`, `autogen`, and `ag2` are aliases for the same PyPI

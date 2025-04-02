@@ -33,10 +33,10 @@ quadratic optimization problems.
 Some extra dependencies are needed for this notebook, which can be installed via pip:
 
 ```bash
-pip install pyautogen eventlet gurobipy
+pip install pyautogen[openai] eventlet gurobipy
 ```
 
-For more information, please refer to the [installation guide](/docs/user-guide/basic-concepts/installing-ag2).
+For more information, please refer to the [installation guide](https://docs.ag2.ai/docs/user-guide/basic-concepts/installing-ag2).
 </Info>
 </div>
 
@@ -56,19 +56,15 @@ from termcolor import colored
 import autogen
 from autogen.code_utils import extract_code
 
-config_list_gpt4 = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST",
-    filter_dict={
-        "model": ["gpt-4", "gpt4", "gpt-3.5-turbogpt-4-32k", "gpt-4-32k-0314", "gpt-4-32k-v0314"],
-    },
+llm_config = autogen.LLMConfig.from_json(path="OAI_CONFIG_LIST").where(
+    model=["gpt-4", "gpt4", "gpt-3.5-turbogpt-4-32k", "gpt-4-32k-0314", "gpt-4-32k-v0314"]
 )
-llm_config = {"config_list": config_list_gpt4}
 ```
 
 
 <div class="tip">
 <Tip>
-Learn more about configuring LLMs for agents [here](/docs/topics/llm_configuration).
+Learn more about configuring LLMs for agents [here](https://docs.ag2.ai/docs/user-guide/basic-concepts/llm-configuration/llm-configuration).
 </Tip>
 </div>
 

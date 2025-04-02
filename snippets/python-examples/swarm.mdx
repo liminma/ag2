@@ -1,15 +1,16 @@
 ```python
 from autogen import (
-    AFTER_WORK,
-    ON_CONDITION,
+    AfterWork,
+    OnCondition,
     AfterWorkOption,
-    SwarmAgent,
+    ConversableAgent,
     SwarmResult,
     initiate_swarm_chat,
     register_hand_off,
+    LLMConfig,
 )
 
-llm_config = {"api_type": "openai", "model": "gpt-4o-mini", "cache_seed": None}
+llm_config = LLMConfig(api_type="openai", model="gpt-4o", cache_seed=None)
 
 # 1. Context
 shared_context = {
@@ -49,31 +50,24 @@ Use the following format:
 <script>How to introduce the topic to the kids</script>
 """
 
-# 3. Our agents now have tools to use (functions above)
-lesson_planner = ConversableAgent(
-    name="planner_agent", llm_config=llm_config, system_message=planner_message, functions=[record_plan]
-)
-
 reviewer_message = """You are a classroom lesson reviewer.
 You compare the lesson plan to the fourth grade curriculum
 and provide a maximum of 3 recommended changes for each review.
-Make sure you provide recommendations each time the plan is updated.
+Always provide feedback for the current lesson plan.
 """
-
-lesson_reviewer = ConversableAgent(
-    name="reviewer_agent", llm_config=llm_config, system_message=reviewer_message, functions=[record_review]
-)
 
 teacher_message = """You are a classroom teacher.
 You decide topics for lessons and work with a lesson planner.
 and reviewer to create and finalise lesson plans.
 """
 
-teacher = ConversableAgent(
-    name="teacher_agent",
-    llm_config=llm_config,
-    system_message=teacher_message,
-)
+# 3. Our agents now have tools to use (functions above)
+with llm_config:
+    lesson_planner = ConversableAgent(name="planner_agent", system_message=planner_message, functions=[record_plan])
+
+    lesson_reviewer = ConversableAgent(name="reviewer_agent", system_message=reviewer_message, functions=[record_review])
+
+    teacher = ConversableAgent(name="teacher_agent", system_message=teacher_message)
 
 # 4. Transitions using hand-offs
 
@@ -81,12 +75,12 @@ teacher = ConversableAgent(
 # allowing reviews. After that's done, transition to the teacher.
 register_hand_off(lesson_planner,
     [
-        ON_CONDITION(
+        OnCondition(
             target=lesson_reviewer,
             condition="After creating/updating and recording the plan, it must be reviewed.",
             available="reviews_left",
         ),
-        AFTER_WORK(agent=teacher),
+        AfterWork(agent=teacher),
     ]
 )
 
@@ -94,10 +88,10 @@ register_hand_off(lesson_planner,
 # no plan to review, otherwise it will provide a review and
 register_hand_off(lesson_reviewer,
     [
-        ON_CONDITION(
+        OnCondition(
             target=lesson_planner, condition="After new feedback has been made and recorded, the plan must be updated."
         ),
-        AFTER_WORK(agent=teacher),
+        AfterWork(agent=teacher),
     ]
 )
 
@@ -105,8 +99,8 @@ register_hand_off(lesson_reviewer,
 # a plan exists, they'll end the swarm.
 register_hand_off(teacher,
     [
-        ON_CONDITION(target=lesson_planner, condition="Create a lesson plan.", available="reviews_left"),
-        AFTER_WORK(AfterWorkOption.TERMINATE),
+        OnCondition(target=lesson_planner, condition="Create a lesson plan.", available="reviews_left"),
+        AfterWork(AfterWorkOption.TERMINATE),
     ]
 )
 

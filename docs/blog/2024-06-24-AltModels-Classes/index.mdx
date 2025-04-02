@@ -1,8 +1,6 @@
 ---
 title: Enhanced Support for Non-OpenAI Models
-authors:
-  - marklysze
-  - Hk669
+authors: [marklysze, Hk669]
 tags: [mistral ai,anthropic,together.ai,gemini]
 ---
 
@@ -15,31 +13,31 @@ tags: [mistral ai,anthropic,together.ai,gemini]
 </div>
 
 <div class="blog-authors">
-  <p class="authors">Authors:</p>
-  <CardGroup cols={2}>
-    <Card href="https://github.com/marklysze">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/marklysze.png" />
-          </div>
-          <div>
-            <p class="name">Mark Sze</p>
-            <p>Software Engineer at AG2.ai</p>
-          </div>
-        </div>
-    </Card>
-    <Card href="https://github.com/Hk669">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/Hk669.png" />
-          </div>
-          <div>
-            <p class="name">Hrushikesh Dokala</p>
-            <p>CS Undergraduate Based in India</p>
-          </div>
-        </div>
-    </Card>
-  </CardGroup>
+<p class="authors">Authors:</p>
+<CardGroup cols={2}>
+<Card href="https://github.com/marklysze">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/marklysze.png" />
+      </div>
+      <div>
+        <p class="name">Mark Sze</p>
+        <p>Software Engineer at AG2.ai</p>
+      </div>
+    </div>
+</Card>
+<Card href="https://github.com/Hk669">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/Hk669.png" />
+      </div>
+      <div>
+        <p class="name">Hrushikesh Dokala</p>
+        <p>CS Undergraduate Based in India</p>
+      </div>
+    </div>
+</Card>
+</CardGroup>
 </div>
 
 ![agents](img/agentstogether.jpeg)
@@ -84,7 +82,7 @@ AutoGen's ability to associate specific configurations to each agent means you c
 
 The common requirements of text generation and function/tool calling are supported by these client classes.
 
-Multi-modal support, such as for image/audio/video, is an area of active development. The [Google Gemini](https://docs.ag2.ai/docs/topics/non-openai-models/cloud-gemini) client class can be
+Multi-modal support, such as for image/audio/video, is an area of active development. The [Google Gemini](/docs/user-guide/models/google-gemini) client class can be
 used to create a multimodal agent.
 
 ## Tips
@@ -94,8 +92,8 @@ Here are some tips when working with these client classes:
 - **Most to least capable** - start with larger models and get your workflow working, then iteratively try smaller models.
 - **Right model** - choose one that's suited to your task, whether it's coding, function calling, knowledge, or creative writing.
 - **Agent names** - these cloud providers do not use the `name` field on a message, so be sure to use your agent's name in their `system_message` and `description` fields, as well as instructing the LLM to 'act as' them. This is particularly important for "auto" speaker selection in group chats as we need to guide the LLM to choose the next agent based on a name, so tweak `select_speaker_message_template`, `select_speaker_prompt_template`, and `select_speaker_auto_multiple_template` with more guidance.
-- **Context length** - as your conversation gets longer, models need to support larger context lengths, be mindful of what the model supports and consider using [Transform Messages](https://docs.ag2.ai/docs/topics/handling_long_contexts/intro_to_transform_messages) to manage context size.
-- **Provider parameters** - providers have parameters you can set such as temperature, maximum tokens, top-k, top-p, and safety. See each client class in AutoGen's [API Reference](https://docs.ag2.ai/docs/reference/oai/gemini) or [documentation](https://docs.ag2.ai/docs/topics/non-openai-models/cloud-gemini) for details.
+- **Context length** - as your conversation gets longer, models need to support larger context lengths, be mindful of what the model supports and consider using [Transform Messages](/docs/use-cases/notebooks/notebooks/agentchat_transform_messages) to manage context size.
+- **Provider parameters** - providers have parameters you can set such as temperature, maximum tokens, top-k, top-p, and safety. See each client class in AutoGen's [API Reference](/docs/api-reference/autogen/oai/gemini/GeminiClient) or [documentation](/docs/user-guide/models/google-gemini) for details.
 - **Prompts** - prompt engineering is critical in guiding smaller LLMs to do what you need. [ConversableAgent](https://docs.ag2.ai/docs/reference/agentchat/conversable_agent), [GroupChat](https://docs.ag2.ai/docs/reference/agentchat/groupchat), [UserProxyAgent](https://docs.ag2.ai/docs/api-reference/autogen/UserProxyAgent), and [AssistantAgent](https://docs.ag2.ai/docs/api-reference/autogen/AssistantAgent) all have customizable prompt attributes that you can tailor. Here are some prompting tips from [Anthropic](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview)([+Library](https://docs.anthropic.com/en/prompt-library/library)), [Mistral AI](https://docs.mistral.ai/guides/prompting_capabilities/), [Together.AI](https://docs.together.ai/docs/examples), and [Meta](https://www.llama.com/docs/how-to-guides/prompting/).
 - **Help!** - reach out on the AutoGen [Discord](https://discord.gg/pAbnFJrkgZ) or [log an issue](https://github.com/ag2ai/ag2/issues) if you need help with or can help improve these client classes.
 
@@ -108,10 +106,10 @@ Now it's time to try them out.
 Install the appropriate client based on the model you wish to use.
 
 ```sh
-pip install autogen["mistral"] # for Mistral AI client
-pip install autogen["anthropic"] # for Anthropic client
-pip install autogen["together"] # for Together.AI client
-pip install autogen["groq"] # for Groq client
+pip install autogen["openai","mistral"] # for Mistral AI client
+pip install autogen["openai","anthropic"] # for Anthropic client
+pip install autogen["openai","together"] # for Together.AI client
+pip install autogen["openai","groq"] # for Groq client
 ```
 
 ### Configuration Setup
@@ -145,15 +143,13 @@ Add your model configurations to the `OAI_CONFIG_LIST`. Ensure you specify the `
 
 ### Usage
 
-The `[config_list_from_json](https://docs.ag2.ai/docs/api-reference/autogen/config_list_from_json#config-list-from-json)` function loads a list of configurations from an environment variable or a json file.
+The `[LLMConfig.from_json](https://docs.ag2.ai/docs/api-reference/autogen/llm_config/LLMConfig)` method loads a list of configurations from an environment variable or a json file.
 
 ```py
 import autogen
-from autogen import AssistantAgent, UserProxyAgent
+from autogen import AssistantAgent, UserProxyAgent, LLMConfig
 
-config_list = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST"
-)
+llm_config = LLMConfig.from_json(path="OAI_CONFIG_LIST")
 ```
 
 ### Construct Agents
@@ -172,10 +168,8 @@ user_proxy =  UserProxyAgent(
     is_termination_msg=lambda msg: not msg["content"]
 )
 
-assistant = AssistantAgent(
-    name="assistant",
-    llm_config = {"config_list": config_list}
-)
+with llm_config:
+    assistant = AssistantAgent(name="assistant")
 ```
 
 ### Start chat
@@ -207,29 +201,24 @@ from typing import Literal
 from typing_extensions import Annotated
 
 # Anthropic configuration, using api_type='anthropic'
-anthropic_llm_config = {
-    "config_list":
-    [
-        {
-            "api_type": "anthropic",
-            "model": "claude-3-5-sonnet-20240620",
-            "api_key": os.getenv("ANTHROPIC_API_KEY"),
-            "cache_seed": None
-        }
-    ]
-}
+anthropic_llm_config = LLMConfig(
+    api_type = "anthropic",
+    model = "claude-3-5-sonnet-20240620",
+    api_key = os.getenv("ANTHROPIC_API_KEY"),
+    cache_seed = None,
+)
 
 # Our functionbot, who will be assigned two functions and
 # given directions to use them.
-functionbot = autogen.AssistantAgent(
-    name="functionbot",
-    system_message="For currency exchange tasks, only use "
-    "the functions you have been provided with. Do not "
-    "reply with helpful tips. Once you've recommended functions "
-    "reply with 'TERMINATE'.",
-    is_termination_msg=lambda x: x.get("content", "") and (x.get("content", "").rstrip().endswith("TERMINATE") or x.get("content", "") == ""),
-    llm_config=anthropic_llm_config,
-)
+with anthropic_llm_config:
+    functionbot = autogen.AssistantAgent(
+        name="functionbot",
+        system_message="For currency exchange tasks, only use "
+        "the functions you have been provided with. Do not "
+        "reply with helpful tips. Once you've recommended functions "
+        "reply with 'TERMINATE'.",
+        is_termination_msg=lambda x: x.get("content", "") and (x.get("content", "").rstrip().endswith("TERMINATE") or x.get("content", "") == ""),
+    )
 
 # Our user proxy agent, who will be used to manage the customer
 # request and conversation with the functionbot, terminating

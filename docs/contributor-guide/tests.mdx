@@ -16,7 +16,7 @@ Make sure all tests pass, this is required for [core-test.yml](https://github.co
 To run tests, install the [test] option:
 
 ```bash
-pip install -e."[test]"
+pip install -e."[openai,test]"
 ```
 
 Then you can run the tests from the `test` folder using the following command:
@@ -36,7 +36,6 @@ See [here](https://github.com/ag2ai/ag2/blob/main/notebook/contributing.md#testi
 - `-m`: Used to select or deselect specific groups of tests marked with pytest markers, such as tests for LLM services like OpenAI, Gemini etc. For example, you can mark tests with `@pytest.mark.openai` and then use `-m openai` to run only those tests.
 - `-m "not docker"`: Skips tests that explicitly require Docker.
 - `-m "not redis"`: Skips tests that require a Redis server.
-
 
 **Examples:**
 
@@ -60,7 +59,7 @@ bash scripts/test-core-llm.sh -m "openai"
 Any code you commit should not decrease coverage. To ensure your code maintains or increases coverage, use the following commands after installing the required test dependencies:
 
 ```bash
-pip install -e ."[test]"
+pip install -e ."[openai,test]"
 
 bash scripts/test.sh test --cov-report=html
 ```

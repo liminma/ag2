@@ -22,7 +22,7 @@ title: Use AG2 in Databricks with DBRX
 
 
 <img
-src="https://www.databricks.com/en-blog-assets/static/2fe1a0af1ee0f6605024a810b604079c/dbrx-blog-header-optimized.png"
+src="https://www.databricks.com/sites/default/files/styles/max_2600x2600/public/2024-03/dbrx-blog-header-optimized.png"
 alt="DBRX launch" />
 
 In March 2024, Databricks released
@@ -36,10 +36,10 @@ APIs](https://docs.databricks.com/en/machine-learning/model-serving/score-founda
 which make DBRX available through an OpenAI-compatible, autoscaling REST
 API.
 
-[Autogen](https://docs.ag2.ai/docs/Use-Cases/agent_chat) is becoming a
-popular standard for agent creation. Built to support any “LLM as a
-service” that implements the OpenAI SDK, it can easily be extended to
-integrate with powerful open source models.
+[Autogen](https://docs.ag2.ai/latest/docs/user-guide/basic-concepts/conversable-agent/)
+is becoming a popular standard for agent creation. Built to support any
+“LLM as a service” that implements the OpenAI SDK, it can easily be
+extended to integrate with powerful open source models.
 
 This notebook will demonstrate a few basic examples of Autogen with
 DBRX, including the use of `AssistantAgent`, `UserProxyAgent`, and
@@ -94,10 +94,12 @@ uncomment and run the below:
 ## Setup DBRX config list
 
 See Autogen docs for more information on the use of `config_list`: [LLM
-Configuration](https://docs.ag2.ai/docs/user-guide/advanced-concepts/llm-configuration-deep-dive#why-is-it-a-list)
+Configuration](https://docs.ag2.ai/docs/user-guide/advanced-concepts/llm-configuration-deep-dive#llm-configuration)
 
 ```python
 import os
+
+from autogen import LLMConfig
 
 # Set environment variables with your current workspace host and a personal access token
 # To a secret you have already set up: dbutils.secrets.get('your_scope_name','databricks_host')
@@ -111,22 +113,22 @@ os.environ["DATABRICKS_HOST"] = "<FILL IN WITH YOUR WORKSPACE URL IN SUPPORTED D
 # Temp token: dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().get()
 os.environ["DATABRICKS_TOKEN"] = "dapi...."
 
-llm_config = {
-    "config_list": [
+llm_config = LLMConfig(
+    config_list=[
         {
             "model": "databricks-dbrx-instruct",
             "api_key": str(os.environ["DATABRICKS_TOKEN"]),
             "base_url": str(os.getenv("DATABRICKS_HOST")) + "/serving-endpoints",
         }
     ],
-}
+)
 ```
 
 ## Hello World Example
 
 Our first example will be with a simple `UserProxyAgent` asking a
 question to an `AssistantAgent`. This is based on the tutorial demo
-[here](https://docs.ag2.ai/docs/tutorial/introduction).
+[here](https://docs.ag2.ai/docs/home/quick-start).
 
 After sending the question and seeing a response, you can type `exit` to
 end the chat or continue to converse.
@@ -149,7 +151,7 @@ In this example, we will implement a “coding agent” that can execute
 code. You will see how this code is run alongside your notebook in your
 current workspace, taking advantage of the performance benefits of
 Databricks clusters. This is based off the demo
-[here](https://docs.ag2.ai/docs/topics/non-openai-models/cloud-mistralai).
+[here](https://docs.ag2.ai/latest/docs/user-guide/models/mistralai).
 
 First, set up a directory:
 
@@ -245,7 +247,7 @@ demonstrates how to extend the default AG2 logging libraries.
 
 First, we will implement a Python `class` that extends the capabilities
 of `autogen.runtime_logging`
-[docs](https://docs.ag2.ai/notebooks/agentchat_logging):
+[docs](https://docs.ag2.ai/latest/docs/use-cases/notebooks/notebooks/agentchat_logging):
 
 ```python
 class DatabricksAutoGenLogger:

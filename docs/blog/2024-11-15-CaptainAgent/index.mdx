@@ -1,11 +1,6 @@
 ---
 title: "Introducing CaptainAgent for Adaptive Team Building"
-authors:
-  - jialeliu
-  - LinxinS97
-  - jieyuz2
-  - skzhang1
-  - qingyunwu
+authors: [jialeliu, LinxinS97, jieyuz2, skzhang1, qingyunwu]
 tags: [LLM, GPT, AutoBuild]
 ---
 
@@ -18,64 +13,64 @@ tags: [LLM, GPT, AutoBuild]
 </div>
 
 <div class="blog-authors">
-  <p class="authors">Authors:</p>
-  <CardGroup cols={2}>
-    <Card href="https://github.com/LeoLjl">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/leoljl.png" />
-          </div>
-          <div>
-            <p class="name">Jiale Liu</p>
-            <p>PhD student at Pennsylvania State University</p>
-          </div>
-        </div>
-    </Card>
-    <Card href="https://linxins.net">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/LinxinS97.png" />
-          </div>
-          <div>
-            <p class="name">Linxin Song</p>
-            <p>PhD student at the University of Southern California</p>
-          </div>
-        </div>
-    </Card>
-    <Card href="https://jieyuz2.github.io/">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/jieyuz2.png" />
-          </div>
-          <div>
-            <p class="name">Jieyu Zhang</p>
-            <p>PhD student at University of Washington</p>
-          </div>
-        </div>
-    </Card>
-    <Card href="https://github.com/skzhang1">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/skzhang1.png" />
-          </div>
-          <div>
-            <p class="name">Shaokun Zhang</p>
-            <p>PhD student at the Pennsylvania State University</p>
-          </div>
-        </div>
-    </Card>
-    <Card href="https://qingyun-wu.github.io/">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/qingyun-wu.png" />
-          </div>
-          <div>
-            <p class="name">Qingyun Wu</p>
-            <p>Co-Founder of AutoGen/AG2 & FLAML, Assistant Professor at Penn State University</p>
-          </div>
-        </div>
-    </Card>
-  </CardGroup>
+<p class="authors">Authors:</p>
+<CardGroup cols={2}>
+<Card href="https://github.com/LeoLjl">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/leoljl.png" />
+      </div>
+      <div>
+        <p class="name">Jiale Liu</p>
+        <p>PhD student at Pennsylvania State University</p>
+      </div>
+    </div>
+</Card>
+<Card href="https://linxins.net">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/LinxinS97.png" />
+      </div>
+      <div>
+        <p class="name">Linxin Song</p>
+        <p>PhD student at the University of Southern California</p>
+      </div>
+    </div>
+</Card>
+<Card href="https://jieyuz2.github.io/">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/jieyuz2.png" />
+      </div>
+      <div>
+        <p class="name">Jieyu Zhang</p>
+        <p>PhD student at University of Washington</p>
+      </div>
+    </div>
+</Card>
+<Card href="https://github.com/skzhang1">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/skzhang1.png" />
+      </div>
+      <div>
+        <p class="name">Shaokun Zhang</p>
+        <p>PhD student at the Pennsylvania State University</p>
+      </div>
+    </div>
+</Card>
+<Card href="https://qingyun-wu.github.io/">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/qingyun-wu.png" />
+      </div>
+      <div>
+        <p class="name">Qingyun Wu</p>
+        <p>Co-Founder of AutoGen/AG2 & FLAML, Assistant Professor at Penn State University</p>
+      </div>
+    </div>
+</Card>
+</CardGroup>
 </div>
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/laGZmQUolBY?si=oU9FSfWPGCTbJ1Y_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -83,6 +78,8 @@ tags: [LLM, GPT, AutoBuild]
 **TL;DR**
 - We introduce CaptainAgent, an agent equipped with the capability to adaptively assemble a team of agents through retrieval-selection-generation process to handle complex tasks via the [`nested chat`](https://docs.ag2.ai/docs/user-guide/advanced-concepts/conversation-patterns-deep-dive#nested-chats) conversation pattern in AG2.
 - CaptainAgent supports all types of `ConversableAgents` implemented in AG2.
+
+
 
 ![Illustration of how CaptainAgent build a team](img/overall.webp)
 
@@ -97,20 +94,22 @@ CaptainAgent iterates over the following two steps until the problem is successf
 
 The design of CaptainAgent allows it to leverage agents and tools from a pre-specified agent library and tool library. In the following section, we demonstrate how to use CaptainAgent with or without the provided library.
 
+
+
 To install AG2 with CaptainAgent:
 
 ```bash
-pip install ag2[captainagent]
+pip install -U ag2[openai,captainagent]
 ```
 
 <Tip>
 If you have been using `autogen` or `pyautogen`, all you need to do is upgrade it using:
 ```bash
-pip install -U autogen[captainagent]
+pip install -U autogen[openai,captainagent]
 ```
 or
 ```bash
-pip install -U pyautogen[captainagent]
+pip install -U pyautogen[openai,captainagent]
 ```
 as `pyautogen`, `autogen`, and `ag2` are aliases for the same PyPI package.
 </Tip>
@@ -121,19 +120,16 @@ Without them, CaptainAgent will automatically generate new agents.
 
 ```python
 from autogen.agentchat.contrib.captainagent import CaptainAgent
-from autogen import UserProxyAgent, config_list_from_json
+from autogen import UserProxyAgent, LLMConfig
 
-llm_config = {
-    "temperature": 0,
-    "config_list": config_list_from_json("OAI_CONFIG_LIST", filter_dict={"model": ["gpt-4o"]}),
-}
+llm_config = LLMConfig.from_json(path="OAI_CONFIG_LIST", temperature=0).where(model="gpt-4o")
 
 ## build agents
-captain_agent = CaptainAgent(
-    name="captain_agent",
-    llm_config=llm_config,
-    code_execution_config={"use_docker": False, "work_dir": "groupchat"},
-)
+with llm_config:
+    captain_agent = CaptainAgent(
+        name="captain_agent",
+        code_execution_config={"use_docker": False, "work_dir": "groupchat"},
+    )
 user_proxy = UserProxyAgent(
     name="user_proxy",
     human_input_mode="NEVER"
@@ -144,28 +140,25 @@ result = user_proxy.initiate_chat(captain_agent, message=query)
 
 # Using CaptainAgent with pre-specified agent/tool libraries
 To use CaptainAgent with pre-specified agent/tool libraries, we just need to specify the path to the agent library and tool library. The two libraries are independent, so you can choose to use one of the libraries or both.
-The tool library we provide requires subscribing to specific APIs, please refer to the [docs](https://docs.ag2.ai/docs/topics/captainagent/tool_library) for details. The following example does not necessarily require tool usage, so it's fine if you are subscribing to them.
+The tool library we provide requires subscribing to specific APIs, please refer to the [docs](/docs/user-guide/reference-agents/captainagent) for details. The following example does not necessarily require tool usage, so it's fine if you are subscribing to them.
 
 To use agents from an agent library, you just need to specify a `library_path` sub-field or a `autobuild_tool_config` field in CaptainAgent's configuration.
 
 ```python
 from autogen.agentchat.contrib.captainagent import CaptainAgent
-from autogen import UserProxyAgent, config_list_from_json
+from autogen import UserProxyAgent, LLMConfig
 
-llm_config = {
-    "temperature": 0,
-    "config_list": config_list_from_json("OAI_CONFIG_LIST", filter_dict={"model": ["gpt-4o"]}),
-}
+llm_config = LLMConfig.from_json(path="OAI_CONFIG_LIST", temperature=0).where(model="gpt-4o")
 
 ## build agents
-captain_agent = CaptainAgent(
-    name="captain_agent",
-    llm_config=llm_config,
-    nested_config=nested_mode_config,
-    agent_lib="captainagent_expert_library.json",
-    tool_lib="default",
-    code_execution_config={"use_docker": False, "work_dir": "groupchat"},
-)
+with llm_config:
+    captain_agent = CaptainAgent(
+        name="captain_agent",
+        nested_config=nested_mode_config,
+        agent_lib="captainagent_expert_library.json",
+        tool_lib="default",
+        code_execution_config={"use_docker": False, "work_dir": "groupchat"},
+    )
 user_proxy = UserProxyAgent(
     name="user_proxy",
     human_input_mode="NEVER"
@@ -176,7 +169,7 @@ result = user_proxy.initiate_chat(captain_agent, message=query)
 
 # Further Reading
 For a detailed description of how to configure the CaptainAgent, please refer to
-- [document](https://docs.ag2.ai/docs/topics/captainagent/agent_library).
+- [document](/docs/user-guide/reference-agents/captainagent).
 - [Notebook example](https://docs.ag2.ai/docs/use-cases/notebooks/notebooks/agentchat_captainagent)
 
 Please also refer to our [paper](https://arxiv.org/pdf/2405.19425) for more details about CaptainAgent and the proposed new team-building paradigm: adaptive build.

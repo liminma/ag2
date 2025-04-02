@@ -1,7 +1,6 @@
 ---
 title: Tools Dependency Injection
-authors:
-  - rjambrecic
+authors: [rjambrecic]
 tags: [tools, tool calling, dependency injection]
 ---
 
@@ -14,20 +13,20 @@ tags: [tools, tool calling, dependency injection]
 </div>
 
 <div class="blog-authors">
-  <p class="authors">Author:</p>
-  <CardGroup cols={2}>
-    <Card href="https://github.com/rjambrecic">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/rjambrecic.png" />
-          </div>
-          <div>
-            <p class="name">Robert Jambrecic</p>
-            <p>Machine Learning Engineer at Airt</p>
-          </div>
-        </div>
-    </Card>
-  </CardGroup>
+<p class="authors">Author:</p>
+<CardGroup cols={2}>
+<Card href="https://github.com/rjambrecic">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/rjambrecic.png" />
+      </div>
+      <div>
+        <p class="name">Robert Jambrecic</p>
+        <p>Machine Learning Engineer at Airt</p>
+      </div>
+    </div>
+</Card>
+</CardGroup>
 </div>
 
 [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) is a secure way to connect external functions to agents without exposing sensitive data such as passwords, tokens, or personal information. This approach ensures that sensitive information remains protected while still allowing agents to perform their tasks effectively, even when working with large language models (LLMs).
@@ -53,17 +52,17 @@ In this guide, we’ll explore how to set up dependency injection and build secu
 To install `AG2`, simply run the following command:
 
 ```bash
-pip install ag2
+pip install -U ag2[openai]
 ```
 
 <Tip>
 If you have been using `autogen` or `pyautogen`, all you need to do is upgrade it using:
 ```bash
-pip install -U autogen
+pip install -U autogen[openai]
 ```
 or
 ```bash
-pip install -U pyautogen
+pip install -U pyautogen[openai]
 ```
 as `pyautogen`, `autogen`, and `ag2` are aliases for the same PyPI package.
 </Tip>
@@ -81,7 +80,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel
 
-from autogen import GroupChat, GroupChatManager
+from autogen import GroupChat, GroupChatManager, LLMConfig
 from autogen.agentchat import ConversableAgent, UserProxyAgent
 from autogen.tools.dependency_injection import BaseContext, Depends
 ```
@@ -127,17 +126,15 @@ Dependency injection simplifies passing data to a function. Here, we'll inject a
 
 Configure the agents for the interaction.
 
-- `config_list` defines the LLM configurations, including the model and API key.
+- `LLMConfig` defines the LLM configurations, including the model and API key.
 - [`UserProxyAgent`](/docs/api-reference/autogen/UserProxyAgent) simulates user inputs without requiring actual human interaction (set to `NEVER`).
 - [`AssistantAgent`](/docs/api-reference/autogen/AssistantAgent) represents the AI agent, configured with the LLM settings.
 
 
 ```python
-config_list = [{"api_type": "openai", "model": "gpt-4o-mini", "api_key": os.environ["OPENAI_API_KEY"]}]
-assistant = ConversableAgent(
-    name="assistant",
-    llm_config={"config_list": config_list},
-)
+llm_config = LLMConfig(api_type="openai", model="gpt-4o-mini", api_key=os.environ["OPENAI_API_KEY"])
+with llm_config:
+    assistant = ConversableAgent(name="assistant")
 user_proxy = UserProxyAgent(
     name="user_proxy_1",
     human_input_mode="NEVER",
@@ -211,16 +208,14 @@ Sometimes, you might not want to use [`BaseContext`](/docs/api-reference/autogen
 
 Configure the agents for the interaction.
 
-- `config_list` defines the LLM configurations, including the model and API key.
+- `LLMConfig` defines the LLM configurations, including the model and API key.
 - [`UserProxyAgent`](/docs/api-reference/autogen/UserProxyAgent) simulates user inputs without requiring actual human interaction (set to `NEVER`).
 - [`AssistantAgent`](/docs/api-reference/autogen/AssistantAgent) represents the AI agent, configured with the LLM settings.
 
 ```python
-config_list = [{"api_type": "openai", "model": "gpt-4o-mini", "api_key": os.environ["OPENAI_API_KEY"]}]
-assistant = ConversableAgent(
-    name="assistant",
-    llm_config={"config_list": config_list},
-)
+llm_config = LLMConfig(api_type="openai", model="gpt-4o-mini", api_key=os.environ["OPENAI_API_KEY"])
+with llm_config:
+    assistant = ConversableAgent(name="assistant")
 user_proxy = UserProxyAgent(
     name="user_proxy_1",
     human_input_mode="NEVER",
@@ -303,16 +298,10 @@ You can assign different contexts, such as distinct account data, to different a
 Let's configure a `GroupChat` with two assistant agents.
 
 ```python
-config_list = [{"api_type": "openai", "model": "gpt-4o-mini", "api_key": os.environ["OPENAI_API_KEY"]}]
-llm_config = {"config_list": config_list}
-assistant_1 = ConversableAgent(
-    name="assistant_1",
-    llm_config={"config_list": config_list},
-)
-assistant_2 = ConversableAgent(
-    name="assistant_2",
-    llm_config={"config_list": config_list},
-)
+llm_config = LLMConfig(api_type="openai", model="gpt-4o-mini", api_key=os.environ["OPENAI_API_KEY"])
+with llm_config:
+    assistant_1 = ConversableAgent(name="assistant_1")
+    assistant_2 = ConversableAgent(name="assistant_2")
 user_proxy = UserProxyAgent(
     name="user_proxy_1",
     human_input_mode="NEVER",

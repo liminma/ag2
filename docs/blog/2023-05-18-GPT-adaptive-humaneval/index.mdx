@@ -1,6 +1,6 @@
 ---
 title: Achieve More, Pay Less - Use GPT-4 Smartly
-authors: sonichi
+authors: [sonichi]
 tags: [LLM, GPT, research]
 ---
 
@@ -13,20 +13,20 @@ tags: [LLM, GPT, research]
 </div>
 
 <div class="blog-authors">
-  <p class="authors">Author:</p>
-  <CardGroup cols={2}>
-    <Card href="https://www.linkedin.com/in/chi-wang-autogen/">
-        <div class="col card">
-          <div class="img-placeholder">
-            <img noZoom src="https://github.com/sonichi.png" />
-          </div>
-          <div>
-            <p class="name">Chi Wang</p>
-            <p>Founder of AutoGen (now AG2) & FLAML</p>
-          </div>
-        </div>
-    </Card>
-  </CardGroup>
+<p class="authors">Author:</p>
+<CardGroup cols={2}>
+<Card href="https://www.linkedin.com/in/chi-wang-autogen/">
+    <div class="col card">
+      <div class="img-placeholder">
+        <img noZoom src="https://github.com/sonichi.png" />
+      </div>
+      <div>
+        <p class="name">Chi Wang</p>
+        <p>Founder of AutoGen (now AG2) & FLAML</p>
+      </div>
+    </div>
+</Card>
+</CardGroup>
 </div>
 
 ![An adaptive way of using GPT-3.5 and GPT-4 outperforms GPT-4 in both coding success rate and inference cost](img/humaneval.png)
@@ -38,6 +38,8 @@ tags: [LLM, GPT, research]
 GPT-4 is a big upgrade of foundation model capability, e.g., in code and math, accompanied by a much higher (more than 10x) price per token to use over GPT-3.5-Turbo. On a code completion benchmark, [HumanEval](https://huggingface.co/datasets/openai_humaneval), developed by OpenAI, GPT-4 can successfully solve 68% tasks while GPT-3.5-Turbo does 46%. It is possible to increase the success rate of GPT-4 further by generating multiple responses or making multiple calls. However, that will further increase the cost, which is already nearly 20 times of using GPT-3.5-Turbo and with more restricted API call rate limit. Can we achieve more with less?
 
 In this blog post, we will explore a creative, adaptive way of using GPT models which leads to a big leap forward.
+
+
 
 ## Observations
 

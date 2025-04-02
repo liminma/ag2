@@ -35,7 +35,7 @@ requires **Python 3.11 or higher**.
 Install `ag2` and `playwright`:
 
 ```bash
-pip install ag2[browser-use]
+pip install -U ag2[browser-use]
 # Installs Playwright and browsers for all OS
 playwright install
 # Additional command, mandatory for Linux only
@@ -46,7 +46,7 @@ playwright install-deps
 > need to do is upgrade it using:
 >
 > ```bash
-> pip install -U autogen[browser-use]
+> pip install -U autogen[openai,browser-use]
 > ```
 >
 > or
@@ -76,23 +76,14 @@ nest_asyncio.apply()
 ## Set your API Endpoint
 
 The
-[`config_list_from_json`](https://docs.ag2.ai/docs/api-reference/autogen/config_list_from_json#config-list-from-json)
-function loads a list of configurations from an environment variable or
-a JSON file.
+[`LLMConfig.from_json`](https://docs.ag2.ai/docs/api-reference/autogen/config_list_from_json#config-list-from-json)
+method loads a list of configurations from an environment variable or a
+JSON file.
 
 ```python
-config_list = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST",
-    filter_dict={
-        "tags": ["gpt-4o-mini"],
-    },
+llm_config = autogen.LLMConfig.from_json(path="OAI_CONFIG_LIST", temperature=0.8, timeout=600).where(
+    tags=["gpt-4o-mini"]
 )
-
-llm_config = {
-    "timeout": 600,
-    "config_list": config_list,
-    "temperature": 0.8,
-}
 ```
 
 # Configure your assistant agent
@@ -149,12 +140,13 @@ Now, let’s create an X post using our x_assistant
 
 ```python
 # Scenario 1. This task requires x_assistant's past state
-post = x_assistant.run(
-    "Create an X post based on the hot topic and the following and mention the influencer:\n" + paper_abstract.summary,
+run_result = x_assistant.run(
+    message="Create an X post based on the hot topic and the following and mention the influencer:\n"
+    + paper_abstract.summary,
     user_input=False,
 )
-
-print(post.summary)
+run_result.process()
+print(run_result.summary)
 ```
 
 Finally, let’s ask our x_assistant who should we follow on X
@@ -162,14 +154,14 @@ Finally, let’s ask our x_assistant who should we follow on X
 ```python
 # Scenario 2. Doing another task that does not require history or past state
 
-influencer_choice = x_assistant.run(
+run_result = x_assistant.run(
     "Find a influencer I should follow on Twitter by searching the web",
     clear_history=True,
     tools=browser_use_tool,
     user_input=False,
 )
-
-print(influencer_choice.summary)
+run_result.process()
+print(run_result.summary)
 ```
 
 <div className="edit-url-container">
